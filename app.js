@@ -26,101 +26,95 @@ const ctx = canvas.getContext("2d");
 
 const brush = document.getElementById("brush");
 const color = document.getElementById("color");
-const colorOptions = Array.from(document.getElementsByClassName("color-option"));
+const colorOptions = Array.from(
+  document.getElementsByClassName("color-option")
+);
 console.dir(colorOptions);
 const fillBtn = document.getElementById("fill-btn");
 const resetBtn = document.getElementById("reset-btn");
 const eraserBtn = document.getElementById("eraser-btn");
 // canvas.addEventListener("mousemove", handleDraw);
 
-// only draw when mouse is down -> mousedown 
+// only draw when mouse is down -> mousedown
 // when mouse is up no drawing -> mouseup
 // update everytime there is a click -> new moveTo()
-
 
 let isPainting = false;
 let isFilling = false;
 
 function handleColor(e) {
-    const chosenColor = e.target.value;
-    ctx.fillStyle = chosenColor;
-    ctx.strokeStyle = chosenColor;
+  const chosenColor = e.target.value;
+  ctx.fillStyle = chosenColor;
+  ctx.strokeStyle = chosenColor;
 }
 
 function brushWidth(e) {
-    const brushWidth = e.target.value;
-    ctx.lineWidth = brushWidth;
+  const brushWidth = e.target.value;
+  ctx.lineWidth = brushWidth;
 }
 
 function handleClick(e) {
-    if (isPainting) {
-     
-        ctx.lineTo(e.offsetX, e.offsetY);
-        ctx.stroke();
-        return;
-    } 
-    
-    ctx.beginPath();
-    ctx.moveTo(e.offsetX, e.offsetY);
+  if (isPainting) {
+    ctx.lineTo(e.offsetX, e.offsetY);
+    ctx.stroke();
+    return;
+  }
+
+  ctx.beginPath();
+  ctx.moveTo(e.offsetX, e.offsetY);
 }
 
 function mouseDown() {
-    isPainting = true;
+  isPainting = true;
 }
 
 function stopPainting() {
-    isPainting = false;
+  isPainting = false;
 }
 
 function onColorClick(e) {
-
-    const colorOption = e.target.dataset.color;
-    ctx.fillStyle = colorOption;
-    ctx.strokeStyle = colorOption;
-    color.value = colorOption;
+  const colorOption = e.target.dataset.color;
+  ctx.fillStyle = colorOption;
+  ctx.strokeStyle = colorOption;
+  color.value = colorOption;
 }
 
 function changeMode() {
-    if (isFilling) {
-        fillBtn.innerText = "Fill";
-        isFilling=false;
-
-    
-    } else {
-        fillBtn.innerText = "Draw";
-        isFilling = true;
-
-    }
-    console.log("is Filling is: ", isFilling);
-    console.log("is Painting is: ", isPainting);
-    console.log("fillBtn inner text: ", fillBtn.innerText);
-    
+  if (isFilling) {
+    fillBtn.innerText = "Fill";
+    isFilling = false;
+  } else {
+    fillBtn.innerText = "Draw";
+    isFilling = true;
+  }
+  console.log("is Filling is: ", isFilling);
+  console.log("is Painting is: ", isPainting);
+  console.log("fillBtn inner text: ", fillBtn.innerText);
 }
 
 function onFillMode() {
-    if(isFilling) {
-        ctx.fillRect(0,0,800,800);
-    }
+  if (isFilling) {
+    ctx.fillRect(0, 0, 800, 800);
+  }
 }
 
 function onReset() {
-  
-        ctx.fillStyle = "white";
-        ctx.fillRect(0,0,800,800);
+  ctx.fillStyle = "white";
+  ctx.fillRect(0, 0, 800, 800);
 }
 function onErase() {
-    ctx.strokeStyle = "white";
-    ctx.stroke();
-    isFilling = false;
-    
+  ctx.strokeStyle = "white";
+  ctx.stroke();
+  isFilling = false;
 }
 canvas.addEventListener("mousemove", handleClick);
 canvas.addEventListener("mousedown", mouseDown);
 canvas.addEventListener("mouseup", stopPainting);
 canvas.addEventListener("mouseleave", stopPainting);
+
 brush.addEventListener("change", brushWidth);
 color.addEventListener("change", handleColor);
-colorOptions.forEach(color => color.addEventListener("click", onColorClick));
+colorOptions.forEach((color) => color.addEventListener("click", onColorClick));
 fillBtn.addEventListener("click", changeMode);
 canvas.addEventListener("click", onFillMode);
 resetBtn.addEventListener("click", onReset);
