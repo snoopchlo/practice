@@ -28,8 +28,9 @@ const brush = document.getElementById("brush");
 const color = document.getElementById("color");
 const colorOptions = Array.from(document.getElementsByClassName("color-option"));
 console.dir(colorOptions);
-
-
+const fillBtn = document.getElementById("fill-btn");
+const resetBtn = document.getElementById("reset-btn");
+const eraserBtn = document.getElementById("eraser-btn");
 // canvas.addEventListener("mousemove", handleDraw);
 
 // only draw when mouse is down -> mousedown 
@@ -38,6 +39,7 @@ console.dir(colorOptions);
 
 
 let isPainting = false;
+let isFilling = false;
 
 function handleColor(e) {
     const chosenColor = e.target.value;
@@ -56,7 +58,8 @@ function handleClick(e) {
         ctx.lineTo(e.offsetX, e.offsetY);
         ctx.stroke();
         return;
-    }
+    } 
+    
     ctx.beginPath();
     ctx.moveTo(e.offsetX, e.offsetY);
 }
@@ -77,6 +80,40 @@ function onColorClick(e) {
     color.value = colorOption;
 }
 
+function changeMode() {
+    if (isFilling) {
+        fillBtn.innerText = "Fill";
+        isFilling=false;
+
+    
+    } else {
+        fillBtn.innerText = "Draw";
+        isFilling = true;
+
+    }
+    console.log("is Filling is: ", isFilling);
+    console.log("is Painting is: ", isPainting);
+    console.log("fillBtn inner text: ", fillBtn.innerText);
+    
+}
+
+function onFillMode() {
+    if(isFilling) {
+        ctx.fillRect(0,0,800,800);
+    }
+}
+
+function onReset() {
+  
+        ctx.fillStyle = "white";
+        ctx.fillRect(0,0,800,800);
+}
+function onErase() {
+    ctx.strokeStyle = "white";
+    ctx.stroke();
+    isFilling = false;
+    
+}
 canvas.addEventListener("mousemove", handleClick);
 canvas.addEventListener("mousedown", mouseDown);
 canvas.addEventListener("mouseup", stopPainting);
@@ -84,3 +121,7 @@ canvas.addEventListener("mouseleave", stopPainting);
 brush.addEventListener("change", brushWidth);
 color.addEventListener("change", handleColor);
 colorOptions.forEach(color => color.addEventListener("click", onColorClick));
+fillBtn.addEventListener("click", changeMode);
+canvas.addEventListener("click", onFillMode);
+resetBtn.addEventListener("click", onReset);
+eraserBtn.addEventListener("click", onErase);
