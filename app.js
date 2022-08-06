@@ -25,7 +25,9 @@ const ctx = canvas.getContext("2d");
 // }
 
 const brush = document.getElementById("brush");
-
+const color = document.getElementById("color");
+const colorOptions = Array.from(document.getElementsByClassName("color-option"));
+console.dir(colorOptions);
 
 
 // canvas.addEventListener("mousemove", handleDraw);
@@ -37,6 +39,11 @@ const brush = document.getElementById("brush");
 
 let isPainting = false;
 
+function handleColor(e) {
+    const chosenColor = e.target.value;
+    ctx.fillStyle = chosenColor;
+    ctx.strokeStyle = chosenColor;
+}
 
 function brushWidth(e) {
     const brushWidth = e.target.value;
@@ -61,8 +68,19 @@ function mouseDown() {
 function stopPainting() {
     isPainting = false;
 }
+
+function onColorClick(e) {
+
+    const colorOption = e.target.dataset.color;
+    ctx.fillStyle = colorOption;
+    ctx.strokeStyle = colorOption;
+    color.value = colorOption;
+}
+
 canvas.addEventListener("mousemove", handleClick);
 canvas.addEventListener("mousedown", mouseDown);
 canvas.addEventListener("mouseup", stopPainting);
 canvas.addEventListener("mouseleave", stopPainting);
 brush.addEventListener("change", brushWidth);
+color.addEventListener("change", handleColor);
+colorOptions.forEach(color => color.addEventListener("click", onColorClick));
